@@ -18,13 +18,13 @@ TypeScript Source Code
          ▼
 ┌─────────────────┐
 │  Glang IR       │  Stage 2: IR Generation
-│  Generation     │  Transform AST into language-independent Glang IR
+│  Generation     │  Transform AST into language-independent IR
 └────────┬────────┘
          │
          ▼
 ┌─────────────────┐
 │  Control Flow   │  Stage 3: CFG Construction
-│  Graph Analysis │  Build control flow graph from Glang IR
+│  Graph Analysis │  Build control flow graph from IR
 └─────────────────┘
 ```
 
@@ -33,9 +33,9 @@ TypeScript Source Code
 ```
 typescript-static-analyzer/
 ├── parser/
-│   └── typescript_parser.py       # AST → Glang IR transformation (~900 lines)
+│   └── typescript_parser.py       # AST → IR transformation (~900 lines)
 ├── analysis/
-│   └── control_flow.py            # Glang IR → CFG construction (~350 lines)
+│   └── control_flow.py            # IR → CFG construction (~350 lines)
 ├── grammar/
 │   └── typescript_grammar.js      # Tree-sitter grammar for TypeScript
 ├── tests/
@@ -60,9 +60,9 @@ typescript-static-analyzer/
 
 Uses [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) with a custom TypeScript grammar (`grammar/typescript_grammar.js`) to parse source code into an Abstract Syntax Tree. Tree-sitter provides incremental parsing and robust error recovery, making it suitable for static analysis on real-world code.
 
-## Stage 2 — Glang IR Generation
+## Stage 2 — IR Generation
 
-The core of this project. The parser (`parser/typescript_parser.py`) traverses the Tree-sitter AST and transforms it into **Glang IR**, a language-independent intermediate representation designed by the LIAN framework. This allows downstream analyses (like CFG) to work uniformly across different source languages.
+The core of this project. The parser (`parser/typescript_parser.py`) traverses the Tree-sitter AST and transforms it into a language-independent intermediate representation (Glang IR). This allows downstream analyses (like CFG) to work uniformly across different source languages.
 
 ### Supported Constructs
 
@@ -96,7 +96,7 @@ Input:
 let x: number = a + b;
 ```
 
-Glang IR output:
+IR output:
 ```python
 [
   {"assign_stmt": {"target": "%v0", "operator": "+", "operand": "a", "operand2": "b"}},
@@ -107,7 +107,7 @@ Glang IR output:
 
 ## Stage 3 — Control Flow Graph
 
-The CFG analyzer (`analysis/control_flow.py`) takes the Glang IR and constructs a control flow graph using NetworkX, modeling all branching and looping behavior.
+The CFG analyzer (`analysis/control_flow.py`) takes the IR and constructs a control flow graph using NetworkX, modeling all branching and looping behavior.
 
 ### Supported Patterns
 
@@ -128,12 +128,12 @@ The CFG analyzer (`analysis/control_flow.py`) takes the Glang IR and constructs 
 
 - **Language:** Python
 - **Parser Generator:** Tree-sitter
-- **Intermediate Representation:** Glang IR (LIAN framework)
+- **Intermediate Representation:** Glang IR
 - **Graph Library:** NetworkX
 
 ## Note
 
-This repository contains the TypeScript-specific components I implemented for the LIAN multi-language static analysis framework. The full framework (base classes, config, utilities) is required to run the parser and analyzer end-to-end. These files demonstrate the design and implementation of language-specific IR generation and control flow analysis.
+This repository contains the TypeScript-specific components I implemented for a multi-language static analysis framework. The full framework (base classes, config, utilities) is required to run the parser and analyzer end-to-end. These files demonstrate the design and implementation of language-specific IR generation and control flow analysis.
 
 ## License
 
