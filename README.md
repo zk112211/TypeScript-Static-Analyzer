@@ -2,7 +2,7 @@
 
 A TypeScript-focused static analysis toolchain that covers three stages of compilation: AST parsing, intermediate representation generation, and control flow graph construction.
 
-Built as part of a multi-language static analysis framework ([LIAN](https://github.com/anthropics/lian)) during the Compiler Design course at Fudan University.
+Built as part of a multi-language static analysis framework during the Compiler Design course at Fudan University.
 
 ## Pipeline
 
